@@ -18,9 +18,12 @@ import java.util.HashMap;
 
 public class Room
 {
+    private int currentWorld;
     private String description;
     private HashMap<String, Room> exits;
     private ArrayList<Item> items = new ArrayList<>();
+    Room room;
+    RoomType type;
 
     /**
      * Create a room described "description". Initially, it has
@@ -28,10 +31,11 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description) 
+    public Room(String description, RoomType type)
     {
         exits = new HashMap<>();
         this.description = description;
+        this.type = type;
     }
 
     public void addItem(Item item) {
@@ -87,6 +91,13 @@ public class Room
             returnString += "  " + i.getLongDescription() + System.lineSeparator();
         }
         return returnString + getExitString();
+    }
+    public int getCurrentWorld() {
+        return currentWorld;
+    }
+
+    public int getWorld() {
+        return this.room.getCurrentWorld();
     }
 
 }

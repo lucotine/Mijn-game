@@ -1,4 +1,8 @@
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class Player {
     public static final int ITEM_GONE = 0;
@@ -10,13 +14,25 @@ public class Player {
 
     private Room previousRoom;
     private ArrayList<Item> bag = new ArrayList<>();
+    private boolean goToNextWorld = false;
 
-    public Player(String name) {
+    private double maxWeight;
+    private Item key;
+
+    public Player(String name, double maxWeight, Item key) {
         this.name = name;
+        this.maxWeight = maxWeight;
+        this.key = key;
     }
 
     public int take(String name) {
+        double currentweight = 0;
+        for (Item i : bag)
+                currentweight += i.getWeight();
         Item item = currentRoom.getItem(name);
+
+        if (currentweight+ item.getWeight() > maxWeight) return ITEM_NOTMOVEABLE;
+
         if (item!=null && item.isMoveable()) {
             bag.add(item);
             return ITEM_GONE;
@@ -45,10 +61,24 @@ public class Player {
     public Room getCurrentRoom() {
         return currentRoom;
     }
+    public boolean isGoToNextWorld() {
+        return goToNextWorld;
+    }
+
+
+    public void setGoToNextWorld(boolean goToNextWorld) {
+        this.goToNextWorld = goToNextWorld;
+    }
 
     public void setCurrentRoom(Room currentRoom) {
+        int keyWorld2 = Collections.frequency(bag, key);
         this.previousRoom = getCurrentRoom();
         this.currentRoom = currentRoom;
+
+        if (this.currentRoom.type.equals(RoomType.KEYDOOR) && currentRoom.getWorld()==keyWorld2) {
+            this.goToNextWorld = true;
+
+        } else System.out.println(" you cannot pass");
 
     }
 
@@ -67,4 +97,5 @@ public class Player {
     public void goBack() {
         this.currentRoom = this.previousRoom;
     }
+
 }

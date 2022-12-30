@@ -1,3 +1,5 @@
+import java.security.Key;
+
 /**
  *  This class is the main class of the "World of Zuul" application. 
  *  "World of Zuul" is a very simple, text based adventure game.  Users 
@@ -19,13 +21,14 @@ public class Game
 {
     private Parser parser;
     private Player player;
+    private Item key = new Item("Key", "Key to go trought bossrooms", 5);
         
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        player = new Player("Lucotine");
+        player = new Player("Lucotine", 20, key);
         createRooms();
         parser = new Parser();
     }
@@ -36,49 +39,51 @@ public class Game
     private void createRooms()
     {
         Room spawnLVL1, basisForest, darkForest, dangerousMountain, bossLVL1, spicyDungeon,  spawnLVL2, waterDesert, waterSafari, safariDesert, bossLVL2,  spawnLVL3, redZone, lavaDesert, lavaCastle, finalBoss, theEnd;
-        Item mastersword, triforce;
+        Item mastersword, triforce, keyWorld2;
       
         // create the rooms
-        spawnLVL1 = new Room("the Spawn of the world lvl1");
+        spawnLVL1 = new Room("the Spawn of the world lvl1", RoomType.START);
             triforce = new Item("triforce", "beautifull triangle of the world",  50);
             spawnLVL1.addItem(triforce);
             triforce.setMoveable(false);
 
-        basisForest = new Room("the basis forest");
+        basisForest = new Room("the basis forest", RoomType.FOREST);
             mastersword = new Item("mastersword", "big big iron blade with a triangle", 15.6);
             basisForest.addItem(mastersword);
+            keyWorld2 = new Item("keyworld2", " key for world2", 5);
+            basisForest.addItem(keyWorld2);
 
-        darkForest = new Room("the dark forest");
+        darkForest = new Room("the dark forest", RoomType.FOREST);
 
-        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule");
+        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule", RoomType.DUNGEON);
             spicyDungeon.addItem(new Item("rum", "a barrel of rum", 10.7));
             spicyDungeon.addItem(new Item("water", "a crate bottles of water", 12.2));
 
-        dangerousMountain = new Room("the big and dangerous mountain");
+        dangerousMountain = new Room("the big and dangerous mountain", RoomType.MOUNTAIN);
 
-        bossLVL1 = new Room("boss room of lvl 1");
+        bossLVL1 = new Room("boss room of lvl 1", RoomType.KEYDOOR);
 
-        spawnLVL2 = new Room("the Spawn of the world lvl2");
+        spawnLVL2 = new Room("the Spawn of the world lvl2", RoomType.START);
 
-        waterSafari = new Room("a safari full of water");
+        waterSafari = new Room("a safari full of water", RoomType.DESERTZONE);
 
-        waterDesert = new Room("the desert with water somewhere");
+        waterDesert = new Room("the desert with water somewhere", RoomType.DESERTZONE);
 
-        safariDesert = new Room("a safari with desert");
+        safariDesert = new Room("a safari with desert", RoomType.DESERTZONE);
 
-        bossLVL2 = new Room("boss room of lvl 2");
+        bossLVL2 = new Room("boss room of lvl 2", RoomType.KEYDOOR);
 
-        spawnLVL3 = new Room("the Spawn of the world lvl3");
+        spawnLVL3 = new Room("the Spawn of the world lvl3", RoomType.START);
 
-        redZone = new Room("the most dangerous zone");
+        redZone = new Room("the most dangerous zone", RoomType.LAVAZONE);
 
-        lavaDesert = new Room("a lava zone to be carefully");
+        lavaDesert = new Room("a lava zone to be carefully", RoomType.LAVAZONE);
 
-        lavaCastle = new Room("the castle of lava where the boss reside");
+        lavaCastle = new Room("the castle of lava where the boss reside", RoomType.LAVAZONE);
 
-        finalBoss = new Room("the final boss room");
+        finalBoss = new Room("the final boss room", RoomType.KEYDOOR);
 
-        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ");
+        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ", RoomType.FINISH);
 
 
 
@@ -162,14 +167,14 @@ public class Game
     {
         System.out.println();
         System.out.println("Welcome to the world of Hyrule");
-        System.out.println("This world is a world with adventure and fun.");
         System.out.println("Type 'help' if you need help. :)");
         System.out.println();
         printLocationInfo();
     }
 
     private void printLocationInfo() {
-        System.out.println(player.getName() + " entered " + player.getCurrentRoom().getLongDescription());
+        System.out.println("current floor: ");
+        System.out.println(player.getCurrentRoom().getLongDescription());
         System.out.println(player.getBagDescription());
         System.out.println();
     }
@@ -249,6 +254,8 @@ public class Game
         }
 
     }
+
+
     // implementations of user commands:
 
     /**
@@ -322,6 +329,7 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
+
 
 
 
