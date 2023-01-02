@@ -49,48 +49,48 @@ public class Game
         Item mastersword, triforce, keyWorld2;
       
         // create the rooms
-        spawnLVL1 = new Room("the Spawn of the world lvl1");
+        spawnLVL1 = new Room("the Spawn of the world lvl1", null);
             triforce = new Item("triforce", "beautifull triangle of the world",  50);
             spawnLVL1.addItem(triforce);
             triforce.setMoveable(false);
 
-        basisForest = new Room("the basis forest");
+        basisForest = new Room("the basis forest", null);
             mastersword = new Item("mastersword", "big big iron blade with a triangle", 15.6);
             basisForest.addItem(mastersword);
             keyWorld2 = new Item("keyworld2", " key for world2", 5);
             basisForest.addItem(keyWorld2);
 
-        darkForest = new Room("the dark forest");
+        darkForest = new Room("the dark forest", null);
 
-        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule");
+        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule", null);
             spicyDungeon.addItem(new Item("rum", "a barrel of rum", 10.7));
             spicyDungeon.addItem(new Item("water", "a crate bottles of water", 12.2));
 
-        dangerousMountain = new Room("the big and dangerous mountain");
+        dangerousMountain = new Room("the big and dangerous mountain", null);
 
-        bossLVL1 = new Room("boss room of lvl 1");
+        bossLVL1 = new Room("boss room of lvl 1", keyWorld2);
 
-        spawnLVL2 = new Room("the Spawn of the world lvl2");
+        spawnLVL2 = new Room("the Spawn of the world lvl2", null);
 
-        waterSafari = new Room("a safari full of water");
+        waterSafari = new Room("a safari full of water", null);
 
-        waterDesert = new Room("the desert with water somewhere");
+        waterDesert = new Room("the desert with water somewhere", null);
 
-        safariDesert = new Room("a safari with desert");
+        safariDesert = new Room("a safari with desert", null);
 
-        bossLVL2 = new Room("boss room of lvl 2");
+        bossLVL2 = new Room("boss room of lvl 2", null);
 
-        spawnLVL3 = new Room("the Spawn of the world lvl3");
+        spawnLVL3 = new Room("the Spawn of the world lvl3", null);
 
-        redZone = new Room("the most dangerous zone");
+        redZone = new Room("the most dangerous zone", null);
 
-        lavaDesert = new Room("a lava zone to be carefully");
+        lavaDesert = new Room("a lava zone to be carefully", null);
 
-        lavaCastle = new Room("the castle of lava where the boss reside");
+        lavaCastle = new Room("the castle of lava where the boss reside", null);
 
-        finalBoss = new Room("the final boss room");
+        finalBoss = new Room("the final boss room", null);
 
-        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ");
+        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ", null);
 
 
 
@@ -173,7 +173,7 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println("Enter you'r name.");
+        System.out.println("Enter your name.");
         playerName = reader.nextLine();
         System.out.println("Welcome" + playerName + " to the world of Hyrule");
         System.out.println("Type 'help' if you need help. :)");
@@ -296,32 +296,44 @@ public class Game
      * Try to go in one direction. If there is an exit, enter
      * the new room, otherwise print an error message.
      */
-    private void goRoom(Command command) 
-    {
-        if(!command.hasSecondWord()) {
-            // if there is no second word, we don't know where to go...
-            System.out.println("Go where?");
-            return;
-        }
-
+    private void goRoom(Command command) {
         String direction = command.getSecondWord();
-
-        // Try to leave current room.
         Room nextRoom = player.getCurrentRoom().getExit(direction);
 
-        if (direction.equals("back")){
-            player.goBack();
-            printLocationInfo();
-            return;
-        }
+        if (nextRoom != null && !(nextRoom.getKey() == null) && (!player.getBag().contains(nextRoom.getKey()))) {
+            System.out.println("You dont have the key for this room");
+        } else {
 
-        //can also use else if instead of return;
-        if (nextRoom == null) {
-            System.out.println("There is no door!");
-        }
-        else {
-            player.setCurrentRoom(nextRoom);
-            printLocationInfo();
+            if (nextRoom != null){
+                nextRoom.setKey(null);
+            }
+
+
+            if (!command.hasSecondWord()) {
+                // if there is no second word, we don't know where to go...
+                System.out.println("Go where?");
+                return;
+            }
+
+
+
+            // Try to leave current room.
+
+
+            if (direction.equals("back")) {
+                player.goBack();
+                printLocationInfo();
+                return;
+            }
+
+            //can also use else if instead of return;
+            if (nextRoom == null) {
+                System.out.println("There is no door!");
+            } else {
+                player.setCurrentRoom(nextRoom);
+                printLocationInfo();
+            }
+
         }
 
     }

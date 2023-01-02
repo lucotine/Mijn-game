@@ -21,6 +21,7 @@ public class Room
     private String description;
     private HashMap<String, Room> exits;
     private ArrayList<Item> items = new ArrayList<>();
+    private Item key;
 
 
     /**
@@ -29,11 +30,20 @@ public class Room
      * "an open court yard".
      * @param description The room's description.
      */
-    public Room(String description)
+    public Room(String description, Item key)
     {
         exits = new HashMap<>();
         this.description = description;
+        this.key = key;
 
+    }
+
+    public Item getKey() {
+        return key;
+    }
+
+    public void setKey(Item key) {
+        this.key = key;
     }
 
     public void addItem(Item item) {

@@ -87,5 +87,7 @@ public class Player {
     }
 
 
-
+        public ArrayList<Item> getBag() {
+        return bag;
+    }
 }
