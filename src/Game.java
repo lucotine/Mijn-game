@@ -1,4 +1,5 @@
 import java.security.Key;
+import java.util.Scanner;
 
 /**
  *  This class is the main class of the "World of Zuul" application. 
@@ -21,16 +22,22 @@ public class Game
 {
     private Parser parser;
     private Player player;
-    private Item key = new Item("Key", "Key to go trought bossrooms", 5);
+    private Room currentRoom, previousRoom,chargeRoom;
+    String playerName;
+    private Scanner reader = new Scanner(System.in);
         
     /**
      * Create the game and initialise its internal map.
      */
     public Game() 
     {
-        player = new Player("Lucotine", 20, key);
         createRooms();
         parser = new Parser();
+        previousRoom = currentRoom;
+        chargeRoom = currentRoom;
+        player = new Player(playerName, currentRoom, 40, 0);
+
+
     }
 
     /**
@@ -42,48 +49,48 @@ public class Game
         Item mastersword, triforce, keyWorld2;
       
         // create the rooms
-        spawnLVL1 = new Room("the Spawn of the world lvl1", RoomType.START);
+        spawnLVL1 = new Room("the Spawn of the world lvl1");
             triforce = new Item("triforce", "beautifull triangle of the world",  50);
             spawnLVL1.addItem(triforce);
             triforce.setMoveable(false);
 
-        basisForest = new Room("the basis forest", RoomType.FOREST);
+        basisForest = new Room("the basis forest");
             mastersword = new Item("mastersword", "big big iron blade with a triangle", 15.6);
             basisForest.addItem(mastersword);
             keyWorld2 = new Item("keyworld2", " key for world2", 5);
             basisForest.addItem(keyWorld2);
 
-        darkForest = new Room("the dark forest", RoomType.FOREST);
+        darkForest = new Room("the dark forest");
 
-        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule", RoomType.DUNGEON);
+        spicyDungeon = new Room("in the Spiciest dungeon from Hyrule");
             spicyDungeon.addItem(new Item("rum", "a barrel of rum", 10.7));
             spicyDungeon.addItem(new Item("water", "a crate bottles of water", 12.2));
 
-        dangerousMountain = new Room("the big and dangerous mountain", RoomType.MOUNTAIN);
+        dangerousMountain = new Room("the big and dangerous mountain");
 
-        bossLVL1 = new Room("boss room of lvl 1", RoomType.KEYDOOR);
+        bossLVL1 = new Room("boss room of lvl 1");
 
-        spawnLVL2 = new Room("the Spawn of the world lvl2", RoomType.START);
+        spawnLVL2 = new Room("the Spawn of the world lvl2");
 
-        waterSafari = new Room("a safari full of water", RoomType.DESERTZONE);
+        waterSafari = new Room("a safari full of water");
 
-        waterDesert = new Room("the desert with water somewhere", RoomType.DESERTZONE);
+        waterDesert = new Room("the desert with water somewhere");
 
-        safariDesert = new Room("a safari with desert", RoomType.DESERTZONE);
+        safariDesert = new Room("a safari with desert");
 
-        bossLVL2 = new Room("boss room of lvl 2", RoomType.KEYDOOR);
+        bossLVL2 = new Room("boss room of lvl 2");
 
-        spawnLVL3 = new Room("the Spawn of the world lvl3", RoomType.START);
+        spawnLVL3 = new Room("the Spawn of the world lvl3");
 
-        redZone = new Room("the most dangerous zone", RoomType.LAVAZONE);
+        redZone = new Room("the most dangerous zone");
 
-        lavaDesert = new Room("a lava zone to be carefully", RoomType.LAVAZONE);
+        lavaDesert = new Room("a lava zone to be carefully");
 
-        lavaCastle = new Room("the castle of lava where the boss reside", RoomType.LAVAZONE);
+        lavaCastle = new Room("the castle of lava where the boss reside");
 
-        finalBoss = new Room("the final boss room", RoomType.KEYDOOR);
+        finalBoss = new Room("the final boss room");
 
-        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ", RoomType.FINISH);
+        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ");
 
 
 
@@ -105,6 +112,8 @@ public class Game
         spicyDungeon.setExit("up", darkForest);
 
         bossLVL1.setExit("worldlvl2", spawnLVL2);
+
+        currentRoom = spawnLVL1;
 
         //LVL2
         spawnLVL2.setExit("waterdesert", waterDesert);
@@ -139,7 +148,6 @@ public class Game
 
 
 
-        player.setCurrentRoom(spawnLVL1);
     }
 
     /**
@@ -165,15 +173,15 @@ public class Game
      */
     private void printWelcome()
     {
-        System.out.println();
-        System.out.println("Welcome to the world of Hyrule");
+        System.out.println("Enter you'r name.");
+        playerName = reader.nextLine();
+        System.out.println("Welcome" + playerName + " to the world of Hyrule");
         System.out.println("Type 'help' if you need help. :)");
         System.out.println();
         printLocationInfo();
     }
 
     private void printLocationInfo() {
-        System.out.println("current floor: ");
         System.out.println(player.getCurrentRoom().getLongDescription());
         System.out.println(player.getBagDescription());
         System.out.println();
@@ -216,6 +224,10 @@ public class Game
             case QUIT:
                 wantToQuit = quit(command);
                 break;
+            case CHARGE:
+                charge(command);
+            case FIRE:
+                fire(command);
             default:
         }
 
@@ -329,7 +341,24 @@ public class Game
             return true;  // signal that we want to quit
         }
     }
+    public void charge(Command command){
 
+        if (command.hasSecondWord())
+            System.out.println("Please type 'charge' to charge the sword");
+
+        chargeRoom = currentRoom;
+        System.out.println("Sword has been charged");
+    }
+
+    public void fire (Command command){
+        if (command.hasSecondWord())
+            System.out.println("please type 'fire' to shoot");
+        else if (!previousRoom.equals(currentRoom)){
+            currentRoom = chargeRoom;
+            System.out.println("you dumbass");
+            System.out.println(currentRoom.getLongDescription());
+        }
+    }
 
 
 
