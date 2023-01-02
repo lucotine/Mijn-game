@@ -22,7 +22,7 @@ public class Game
 {
     private Parser parser;
     private Player player;
-    private Room currentRoom, previousRoom,chargeRoom;
+    private Room currentRoom, previousRoom, chargeRoom;
     String playerName;
     private Scanner reader = new Scanner(System.in);
         
@@ -226,8 +226,10 @@ public class Game
                 break;
             case CHARGE:
                 charge(command);
+                break;
             case FIRE:
                 fire(command);
+                break;
             default:
         }
 
@@ -285,7 +287,7 @@ public class Game
     }
 
     private void look() {
-        System.out.println(player.getName() + " is " + player.getCurrentRoom().getLongDescription());
+        System.out.println(player.getCurrentRoom().getLongDescription());
     }
 
     private void eat() {
@@ -355,19 +357,19 @@ public class Game
     }
     public void charge(Command command){
 
-        if (command.hasSecondWord())
+        if (command.hasSecondWord()) {
             System.out.println("Please type 'charge' to charge the sword");
-
-        chargeRoom = currentRoom;
-        System.out.println("Sword has been charged");
+        } else {
+            chargeRoom = player.getCurrentRoom();
+            System.out.println("Sword has been charged");
+        }
     }
 
     public void fire (Command command){
         if (command.hasSecondWord())
             System.out.println("please type 'fire' to shoot");
-        else if (!previousRoom.equals(currentRoom)){
+        else if (previousRoom.equals(currentRoom)){
             currentRoom = chargeRoom;
-            System.out.println("you dumbass");
             System.out.println(currentRoom.getLongDescription());
         }
     }
