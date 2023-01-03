@@ -86,8 +86,7 @@ public class Player {
         this.currentRoom = this.previousRoom;
     }
 
-
-        public ArrayList<Item> getBag() {
+    public ArrayList<Item> getBag() {
         return bag;
     }
 }

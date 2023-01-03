@@ -46,7 +46,7 @@ public class Game
     private void createRooms()
     {
         Room spawnLVL1, basisForest, darkForest, dangerousMountain, bossLVL1, spicyDungeon,  spawnLVL2, waterDesert, waterSafari, safariDesert, bossLVL2,  spawnLVL3, redZone, lavaDesert, lavaCastle, finalBoss, theEnd;
-        Item mastersword, triforce, keyWorld2;
+        Item mastersword, triforce, keyWorld2, keyWorld3, keyFinalBoss, endKEY;
       
         // create the rooms
         spawnLVL1 = new Room("the Spawn of the world lvl1", null);
@@ -75,22 +75,28 @@ public class Game
         waterSafari = new Room("a safari full of water", null);
 
         waterDesert = new Room("the desert with water somewhere", null);
+            keyWorld3 = new Item("finalBossKey", "key to go trough bossroom en end the game", 5);
+            waterDesert.addItem(keyWorld3);
 
         safariDesert = new Room("a safari with desert", null);
 
-        bossLVL2 = new Room("boss room of lvl 2", null);
+        bossLVL2 = new Room("boss room of lvl 2", keyWorld3);
 
         spawnLVL3 = new Room("the Spawn of the world lvl3", null);
 
         redZone = new Room("the most dangerous zone", null);
+            keyFinalBoss = new Item("finalBossKey", "key to go trough bossroom en end the game", 5);
+            redZone.addItem(keyFinalBoss);
 
         lavaDesert = new Room("a lava zone to be carefully", null);
 
         lavaCastle = new Room("the castle of lava where the boss reside", null);
 
-        finalBoss = new Room("the final boss room", null);
+        finalBoss = new Room("the final boss room", keyFinalBoss);
+            endKEY = new Item("endKey", "key to destroy the game and end it ", 5);
+            finalBoss.addItem(endKEY);
 
-        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ", null);
+        theEnd = new Room("the end room thank you for playing you can now leave the game with 'exit' ", endKEY);
 
 
 
@@ -361,7 +367,7 @@ public class Game
             System.out.println("Please type 'charge' to charge the sword");
         } else {
             chargeRoom = player.getCurrentRoom();
-            System.out.println("Sword has been charged");
+            System.out.println("You are being charged");
         }
     }
 
